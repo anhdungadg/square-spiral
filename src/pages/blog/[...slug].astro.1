@@ -1,0 +1,19 @@
+---
+// src/pages/blog/[slug].astro
+import { getAllBlogPosts, getPostContent } from "../../utils/getNotionBlogPosts";
+// import { getPostContent } from "../../utils/getPostContent";
+import BlogPost from "../../layouts/BlogPost.astro";
+
+export async function getStaticPaths() {
+  const posts = await getAllBlogPosts();
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+const { post } = Astro.props;
+const content = await getPostContent(post.id);
+---
+<BlogPost {...post}>
+  <article set:html={content} />
+</BlogPost>
