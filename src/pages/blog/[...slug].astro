@@ -1,20 +1,19 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+// src/pages/blog/[slug].astro
+import { getAllBlogPosts, getPostContent } from "../../utils/getNotionBlogPosts";
+// import { getPostContent } from "../../utils/getPostContent";
+import BlogPost from "../../layouts/BlogPost.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.slug },
-		props: post,
-	}));
+  const posts = await getAllBlogPosts();
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
 }
-type Props = CollectionEntry<'blog'>;
-
-const post = Astro.props;
-const { Content } = await post.render();
+const { post } = Astro.props;
+const content = await getPostContent(post.id);
 ---
-
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost {...post}>
+  <article set:html={content} />
 </BlogPost>
