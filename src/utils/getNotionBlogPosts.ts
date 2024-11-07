@@ -94,7 +94,7 @@ export async function getAllBlogPosts(): Promise<CollectionEntry<"blogs">[]> {
         return blogs;
         
     } catch (error) {
-        console.error("Error fetching blog posts from Notion:", error);
+        console.error("Error fetching blog posts from Notion test:", error);
         throw error;
     }
 }
